@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alera Medtech — Sales Platform</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Dancing+Script:wght@600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sb-logo">
+            <img src="" alt="">
+            <div class="sb-tagline">Sales Automation Platform</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Overview</div>
+            <div class="nav active" onclick="nav('dashboard')"><span class="ic">📊</span> Dashboard</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Sales Documents</div>
+            <div class="nav" onclick="nav('quotes')"><span class="ic">💬</span> Quotes <span class="nav-badge"
+                    id="nb-quotes">0</span></div>
+            <div class="nav" onclick="nav('proforma')"><span class="ic">📄</span> Pro Forma Invoices</div>
+            <div class="nav" onclick="nav('invoices')"><span class="ic">🧾</span> Invoices <span class="nav-badge"
+                    id="nb-invoices">0</span></div>
+            <div class="nav" onclick="nav('salesorders')"><span class="ic">📦</span> Sales Orders</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Shipping & Trade</div>
+            <div class="nav" onclick="nav('comminvoice')"><span class="ic">🌍</span> Commercial Invoices</div>
+            <div class="nav" onclick="nav('packing')"><span class="ic">📋</span> Packing Lists</div>
+            <div class="nav" onclick="nav('coo')"><span class="ic">🏳</span> COO Certificates</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Procurement</div>
+            <div class="nav" onclick="nav('po')"><span class="ic">🛒</span> Purchase Orders</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Relationships</div>
+            <div class="nav" onclick="nav('customers')"><span class="ic">👤</span> Customers <span class="nav-badge"
+                    id="nb-customers">0</span></div>
+            <div class="nav" onclick="nav('vendors')"><span class="ic">🏭</span> Vendors</div>
+            <div class="nav" onclick="nav('nda')"><span class="ic">🔏</span> NDAs</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Content</div>
+            <div class="nav" onclick="nav('library')"><span class="ic">📁</span> Document Library</div>
+        </div>
+        <div class="sb-section">
+            <div class="sb-label">Administration</div>
+            <div class="nav" onclick="nav('admin')"><span class="ic">🔧</span> User Management</div>
+        </div>
+        <div class="sb-footer">
+            <div class="user-row">
+                <div class="u-av">AD</div>
+                <div>
+                    <div class="u-name">Admin</div>
+                    <div class="u-role">Super Admin · Alera Medtech</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <div class="brand-bar"></div>
+        <div class="topbar">
+            <div class="topbar-title" id="pageTitle">Dashboard</div>
+            <div class="topbar-actions">
+                <div class="search-wrap"><span style="color:var(--muted);font-size:13px">🔍</span><input type="text"
+                        placeholder="Search docs, customers…" oninput="globalSearch(this.value)"></div>
+                <button class="btn btn-primary" id="topNewBtn" onclick="openCreateModal()">+ New Document</button>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+            <div id="page-dashboard" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-lbl">Total Customers</div>
+                        <div class="stat-val" id="stat-customers">0</div>
+                        <div class="stat-chg">Active accounts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-lbl">Documents Created</div>
+                        <div class="stat-val" id="stat-docs">0</div>
+                        <div class="stat-chg">All time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-lbl">Quotes</div>
+                        <div class="stat-val" id="stat-quotes">0</div>
+                        <div class="stat-chg">In history</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-lbl">Invoices</div>
+                        <div class="stat-val" id="stat-invoices">0</div>
+                        <div class="stat-chg">In history</div>
+                    </div>
+                </div>
+                <div class="qa-grid">
+                    <div class="qa-card" onclick="openCreateModal('Quote')">
+                        <div class="qa-icon">💬</div>
+                        <div class="qa-lbl">New Quote</div>
+                        <div class="qa-sub">Create branded quotation</div>
+                    </div>
+                    <div class="qa-card" onclick="openCreateModal('Invoice')">
+                        <div class="qa-icon">🧾</div>
+                        <div class="qa-lbl">New Invoice</div>
+                        <div class="qa-sub">Generate & send invoice</div>
+                    </div>
+                    <div class="qa-card" onclick="nav('customers');setTimeout(()=>openCustomerModal(),150)">
+                        <div class="qa-icon">👤</div>
+                        <div class="qa-lbl">Add Customer</div>
+                        <div class="qa-sub">Auto-generate customer code</div>
+                    </div>
+                    <div class="qa-card" onclick="openNdaModal()">
+                        <div class="qa-icon">🔏</div>
+                        <div class="qa-lbl">Create NDA</div>
+                        <div class="qa-sub">Draft & send for signature</div>
+                    </div>
+                </div>
+                <div class="dash-grid">
+                    <div class="card">
+                        <div class="card-hdr"><span class="card-title">Recent Documents</span><button
+                                class="btn btn-sm btn-outline" onclick="nav('quotes')">View All</button></div>
+                        <div id="dash-recent-docs"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-hdr"><span class="card-title">Recent Customers</span></div>
+                        <div id="dash-recent-customers" style="padding:0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOCUMENT PAGES (quotes, proforma, invoices, etc.) -->
+            <div id="page-quotes" class="page">
+                <div id="doclist-quotes"></div>
+            </div>
+            <div id="page-proforma" class="page">
+                <div id="doclist-proforma"></div>
+            </div>
+            <div id="page-invoices" class="page">
+                <div id="doclist-invoices"></div>
+            </div>
+            <div id="page-salesorders" class="page">
+                <div id="doclist-salesorders"></div>
+            </div>
+            <div id="page-comminvoice" class="page">
+                <div id="doclist-comminvoice"></div>
+            </div>
+            <div id="page-packing" class="page">
+                <div id="doclist-packing"></div>
+            </div>
+            <div id="page-coo" class="page">
+                <div id="doclist-coo"></div>
+            </div>
+            <div id="page-po" class="page">
+                <div id="doclist-po"></div>
+            </div>
+            <div id="page-nda" class="page">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-title">Non-Disclosure Agreements</span><button
+                            class="btn btn-primary" onclick="openNdaModal()">+ Create NDA</button></div>
+                    <div id="doclist-nda"></div>
+                </div>
+            </div>
+
+            <!-- CUSTOMERS PAGE -->
+            <div id="page-customers" class="page">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                    <div>
+                        <div style="font-size:18px;font-weight:700">Customers</div>
+                        <div style="font-size:12.5px;color:var(--muted);margin-top:2px" id="cust-count-label">0
+                            customers</div>
+                    </div>
+                    <div style="display:flex;gap:9px;align-items:center">
+                        <div class="search-wrap" style="width:200px">
+                            <span style="color:var(--muted);font-size:13px">🔍</span>
+                            <input type="text" placeholder="Search customers…" oninput="renderCustomersPage(this.value)"
+                                id="cust-search">
+                        </div>
+                        <button class="btn btn-primary" onclick="openCustomerModal()">+ Add Customer</button>
+                    </div>
+                </div>
+                <div id="customers-grid"></div>
+            </div>
+
+            <!-- VENDORS -->
+            <div id="page-vendors" class="page">
+                <div class="card">
+                    <div class="card-hdr"><span class="card-title">Vendors / Suppliers</span><button
+                            class="btn btn-primary" onclick="openVendorModal()">+ Add Vendor</button></div>
+                    <div style="padding:0">
+                        <table class="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Company</th>
+                                    <th>Contact</th>
+                                    <th>Category</th>
+                                    <th>Country</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="doc-num">VEND-0001</span></td>
+                                    <td>MedParts Corp</td>
+                                    <td>Linda Foster</td>
+                                    <td>Medical Components</td>
+                                    <td>USA</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIBRARY -->
+            <div id="page-library" class="page">
+                <div style="display:flex;gap:11px;margin-bottom:16px;align-items:center">
+                    <div class="tabs" style="margin:0">
+                        <div class="tab active" onclick="switchTab(this,'lib-all')">All</div>
+                        <div class="tab" onclick="switchTab(this,'lib-brochures')">Brochures</div>
+                        <div class="tab" onclick="switchTab(this,'lib-manuals')">Manuals</div>
+                        <div class="tab" onclick="switchTab(this,'lib-marketing')">Marketing</div>
+                    </div>
+                    <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openUploadModal()">⬆
+                        Upload</button>
+                </div>
+                <div id="lib-all" class="lib-grid">
+                    <div class="lib-item">
+                        <div class="lib-icon">📕</div>
+                        <div class="lib-name">Alera Product Catalogue 2025</div>
+                        <div class="lib-meta">PDF · 4.2 MB</div>
+                    </div>
+                    <div class="lib-item">
+                        <div class="lib-icon">📘</div>
+                        <div class="lib-name">Device User Manual v3.1</div>
+                        <div class="lib-meta">PDF · 8.1 MB</div>
+                    </div>
+                    <div class="lib-item">
+                        <div class="lib-icon">📗</div>
+                        <div class="lib-name">Company Brochure 2025</div>
+                        <div class="lib-meta">PDF · 2.8 MB</div>
+                    </div>
+                    <div class="lib-item">
+                        <div class="lib-icon">📊</div>
+                        <div class="lib-name">Sales Deck Q1 2025</div>
+                        <div class="lib-meta">PPTX · 6.5 MB</div>
+                    </div>
+                    <div class="lib-item" style="border:2px dashed var(--border);background:transparent"
+                        onclick="openUploadModal()">
+                        <div class="lib-icon" style="opacity:.3">+</div>
+                        <div class="lib-name" style="color:var(--muted)">Upload New</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN -->
+            <div id="page-admin" class="page">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab(this,'tab-users')">Users</div>
+                    <div class="tab" onclick="switchTab(this,'tab-settings')">System Settings</div>
+                </div>
+                <div id="tab-users" class="tab-panel active">
+                    <div class="card">
+                        <div class="card-hdr"><span class="card-title">User Accounts</span><button
+                                class="btn btn-primary" onclick="openUserModal()">+ Add User</button></div>
+                        <div style="padding:0">
+                            <table class="tbl">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:9px">
+                                                <div class="u-av" style="width:26px;height:26px;font-size:10px">AD</div>
+                                                Admin
+                                            </div>
+                                        </td>
+                                        <td>sales.info@aleramedtech.com</td>
+                                        <td><span class="chip">Super Admin</span></td>
+                                        <td><span class="badge bd-approved">Active</span></td>
+                                        <td><button class="btn btn-sm btn-outline">Edit</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-settings" class="tab-panel">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-grid">
+                                <div class="fg"><label class="lbl">Legal Name</label><input class="fc"
+                                        value="Alera Medtech LLC"></div>
+                                <div class="fg"><label class="lbl">EIN</label><input class="fc" value="88-3147715">
+                                </div>
+                                <div class="fg"><label class="lbl">Address</label><input class="fc"
+                                        value="77 Rowe Street, Suite 2C, Auburndale, MA 02466"></div>
+                                <div class="fg"><label class="lbl">Phone</label><input class="fc"
+                                        value="+1 888 70ALERA"></div>
+                                <div class="fg"><label class="lbl">Email</label><input class="fc"
+                                        value="sales.info@aleramedtech.com"></div>
+                                <div class="fg"><label class="lbl">Website</label><input class="fc"
+                                        value="www.aleramedtech.com"></div>
+                            </div>
+                            <div class="sec-div">Banking</div>
+                            <div class="bank-box">
+                                <div class="bank-row"><span class="bank-lbl">Bank</span><span class="bank-val">Bank of
+                                        America</span></div>
+                                <div class="bank-row"><span class="bank-lbl">Account</span><span class="bank-val">Alera
+                                        Medtech LLC — 466016030996</span></div>
+                                <div class="bank-row"><span class="bank-lbl">ACH Routing</span><span
+                                        class="bank-val">011000138</span></div>
+                                <div class="bank-row"><span class="bank-lbl">Wire Routing</span><span
+                                        class="bank-val">026009593</span></div>
+                                <div class="bank-row"><span class="bank-lbl">SWIFT</span><span
+                                        class="bank-val">BOFAUS3N</span></div>
+                            </div>
+                            <div style="margin-top:14px"><button class="btn btn-primary"
+                                    onclick="toast('✅ Settings saved!')">Save Settings</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /content -->
+    </main>
+
+    <!-- ══════════════════════════════════
+     MODALS
+══════════════════════════════════ -->
+
+    <!-- CREATE DOCUMENT MODAL -->
+    <div class="overlay" id="createModal">
+        <div class="modal modal-lg">
+            <div class="modal-hdr">
+                <div style="display:flex;align-items:center;gap:11px">
+                    <img src="" alt="">
+                    <div class="modal-title" id="createModalTitle">New Document</div>
+                </div>
+                <button class="modal-close" onclick="closeModal('createModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box">🔢 Document number auto-assigned &nbsp;·&nbsp; Saved to Alera Medtech records upon
+                    creation</div>
+                <div class="form-grid">
+                    <div class="fg"><label class="lbl">Document Type</label>
+                        <select class="fc" id="docType" onchange="updateDocNum()">
+                            <option value="Quote">Quotation</option>
+                            <option value="Pro Forma">Pro Forma Invoice</option>
+                            <option value="Invoice">Invoice</option>
+                            <option value="Sales Order">Sales Order</option>
+                            <option value="Commercial Invoice">Commercial Invoice</option>
+                            <option value="Packing List">Packing List</option>
+                            <option value="COO Certificate">COO Certificate</option>
+                            <option value="Purchase Order">Purchase Order</option>
+                        </select>
+                    </div>
+                    <div class="fg"><label class="lbl">Document Number (Auto)</label><input class="fc" id="autoDocNum"
+                            readonly></div>
+                    <div class="fg"><label class="lbl">Date</label><input class="fc" type="date" id="docDate"></div>
+                    <div class="fg"><label class="lbl">Valid Until / Due Date</label><input class="fc" type="date"
+                            id="docDue"></div>
+
+                    <!-- Customer autocomplete -->
+                    <div class="fg form-full">
+                        <label class="lbl">Customer</label>
+                        <div class="ac-wrap">
+                            <input class="fc" id="docCustomerInput" placeholder="Type to search customers…"
+                                autocomplete="off" oninput="acSearch(this.value)" onfocus="acSearch(this.value)"
+                                onblur="setTimeout(()=>hideAc(),180)">
+                            <div class="ac-dropdown" id="acDropdown"></div>
+                            <input type="hidden" id="docCustomerId">
+                        </div>
+                    </div>
+
+                    <div class="fg"><label class="lbl">Currency</label><select class="fc" id="docCurrency">
+                            <option>USD</option>
+                            <option>EUR</option>
+                            <option>CAD</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Payment Terms</label><select class="fc">
+                            <option>Net 30</option>
+                            <option>Net 60</option>
+                            <option>50% Advance</option>
+                            <option>Wire Transfer</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Status</label>
+                        <select class="fc" id="docStatus">
+                            <option value="Draft">Draft</option>
+                            <option value="Sent">Sent</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Paid">Paid</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sec-div">Line Items</div>
+                <table class="li-tbl">
+                    <thead>
+                        <tr>
+                            <th style="width:36%">Description</th>
+                            <th style="width:10%">SKU</th>
+                            <th style="width:8%">Qty</th>
+                            <th style="width:10%">Unit</th>
+                            <th style="width:13%">Unit Price (USD)</th>
+                            <th style="width:8%">Tax%</th>
+                            <th style="width:10%">Total</th>
+                            <th style="width:5%"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="lineItemsBody">
+                        <tr>
+                            <td><input type="text" value="Alera Device Model AM-200"></td>
+                            <td><input type="text" value="AM-200"></td>
+                            <td><input type="number" value="5" oninput="calcLine(this)"></td>
+                            <td><select>
+                                    <option>Units</option>
+                                    <option>Pcs</option>
+                                    <option>Set</option>
+                                </select></td>
+                            <td><input type="number" value="1200" oninput="calcLine(this)"></td>
+                            <td><select>
+                                    <option>0</option>
+                                    <option>5</option>
+                                    <option>10</option>
+                                </select></td>
+                            <td><input type="text" class="li-total" value="6,000" readonly></td>
+                            <td><button class="btn-rm" onclick="rmLine(this)">🗑</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-outline btn-sm" onclick="addLine()">+ Add Line Item</button>
+                <div class="totals-box" style="margin-top:12px">
+                    <div class="tot-row"><span>Subtotal</span><span id="tot-sub">$6,000</span></div>
+                    <div class="tot-row"><span>Tax</span><span>$0</span></div>
+                    <div class="tot-row tot-grand"><span>Total (USD)</span><span id="tot-total">$6,000</span></div>
+                </div>
+
+                <div class="sec-div">Payment Instructions</div>
+                <div class="bank-box">
+                    <div class="bank-row"><span class="bank-lbl">Bank</span><span class="bank-val">Bank of
+                            America</span></div>
+                    <div class="bank-row"><span class="bank-lbl">Account</span><span class="bank-val">Alera Medtech LLC
+                            — 466016030996</span></div>
+                    <div class="bank-row"><span class="bank-lbl">ACH Routing</span><span
+                            class="bank-val">011000138</span></div>
+                    <div class="bank-row"><span class="bank-lbl">Wire Routing</span><span
+                            class="bank-val">026009593</span></div>
+                    <div class="bank-row"><span class="bank-lbl">SWIFT</span><span class="bank-val">BOFAUS3N</span>
+                    </div>
+                </div>
+
+                <div class="sec-div">Notes & Terms</div>
+                <div class="fg"><textarea class="fc" id="docNotes"
+                        rows="3">Quote valid for 30 days. Prices in USD. Delivery within 10–15 business days from confirmed PO.</textarea>
+                </div>
+
+                <div class="sec-div">Authorised Signature</div>
+                <div class="sig-tabs">
+                    <div class="sig-tab active" onclick="switchSigTab(this,'sig-draw')">Draw</div>
+                    <div class="sig-tab" onclick="switchSigTab(this,'sig-type')">Type</div>
+                    <div class="sig-tab" onclick="switchSigTab(this,'sig-upload')">Upload</div>
+                </div>
+                <div id="sig-draw" class="sig-panel active">
+                    <div class="sig-canvas-wrap"><canvas id="sigCanvas"></canvas>
+                        <div class="sig-hint" id="sigHint">Sign here with mouse or touch</div>
+                    </div>
+                    <button class="btn-ghost" style="margin-top:6px" onclick="clearCanvas()">✕ Clear</button>
+                </div>
+                <div id="sig-type" class="sig-panel">
+                    <input class="fc" placeholder="Type your name"
+                        oninput="document.getElementById('typedSig').innerText=this.value" style="margin-bottom:9px">
+                    <div class="sig-canvas-wrap" style="cursor:default">
+                        <div class="typed-sig" id="typedSig">Alera Medtech</div>
+                    </div>
+                </div>
+                <div id="sig-upload" class="sig-panel">
+                    <div class="upload-zone">
+                        <div style="font-size:26px;margin-bottom:7px">🖼</div>Click to upload signature image<div
+                            style="font-size:11px;margin-top:3px">Transparent PNG recommended</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('createModal')">Cancel</button>
+                <button class="btn btn-outline" onclick="saveDoc('Draft')">Save Draft</button>
+                <button class="btn btn-primary" onclick="saveDoc('Sent')">Create & Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOMER MODAL -->
+    <div class="overlay" id="customerModal">
+        <div class="modal">
+            <div class="modal-hdr">
+                <div class="modal-title" id="custModalTitle">Add New Customer</div><button class="modal-close"
+                    onclick="closeModal('customerModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box" id="custCodeBox">🔢 Auto-generated Customer Code: <strong
+                        id="custCodePreview">CUST-0001</strong></div>
+                <input type="hidden" id="editCustomerId">
+                <div class="form-grid">
+                    <div class="fg"><label class="lbl">Company Name *</label><input class="fc" id="cName"
+                            placeholder="Company Name"></div>
+                    <div class="fg"><label class="lbl">Customer Type</label><select class="fc" id="cType">
+                            <option>Domestic (USA)</option>
+                            <option>International</option>
+                            <option>Both</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Contact Person</label><input class="fc" id="cContact"
+                            placeholder="Full Name"></div>
+                    <div class="fg"><label class="lbl">Designation</label><input class="fc" id="cDesig"
+                            placeholder="Purchasing Manager"></div>
+                    <div class="fg"><label class="lbl">Email</label><input class="fc" id="cEmail" type="email"></div>
+                    <div class="fg"><label class="lbl">Phone</label><input class="fc" id="cPhone"></div>
+                    <div class="fg form-full"><label class="lbl">Billing Address</label><textarea class="fc" id="cAddr"
+                            rows="2"></textarea></div>
+                    <div class="fg"><label class="lbl">State</label><input class="fc" id="cState"></div>
+                    <div class="fg"><label class="lbl">ZIP</label><input class="fc" id="cZip"></div>
+                    <div class="fg"><label class="lbl">Country</label><select class="fc" id="cCountry">
+                            <option>United States</option>
+                            <option>Canada</option>
+                            <option>United Kingdom</option>
+                            <option>Australia</option>
+                            <option>Other</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Tax ID / EIN</label><input class="fc" id="cTax"></div>
+                    <div class="fg"><label class="lbl">Credit Limit ($)</label><input class="fc" id="cCredit"
+                            type="number" placeholder="50000"></div>
+                    <div class="fg"><label class="lbl">Payment Terms</label><select class="fc" id="cTerms">
+                            <option>Net 30</option>
+                            <option>Net 60</option>
+                            <option>Advance</option>
+                            <option>Wire Transfer</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Website</label><input class="fc" id="cWeb"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('customerModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveCustomer()">Save Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VENDOR MODAL -->
+    <div class="overlay" id="vendorModal">
+        <div class="modal">
+            <div class="modal-hdr">
+                <div class="modal-title">Add New Vendor</div><button class="modal-close"
+                    onclick="closeModal('vendorModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box">🔢 Auto-generated Vendor Code: <strong>VEND-0002</strong></div>
+                <div class="form-grid">
+                    <div class="fg"><label class="lbl">Company Name</label><input class="fc" placeholder="Vendor Name">
+                    </div>
+                    <div class="fg"><label class="lbl">Category</label><select class="fc">
+                            <option>Medical Components</option>
+                            <option>Biotech</option>
+                            <option>Packaging</option>
+                            <option>Logistics</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Contact Person</label><input class="fc"></div>
+                    <div class="fg"><label class="lbl">Email</label><input class="fc" type="email"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('vendorModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="closeModal('vendorModal');toast('✅ Vendor created!')">Save
+                    Vendor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NDA MODAL -->
+    <div class="overlay" id="ndaModal">
+        <div class="modal modal-lg">
+            <div class="modal-hdr">
+                <div style="display:flex;align-items:center;gap:11px">
+                    <img src="" alt="">
+                    <div class="modal-title">Non-Disclosure Agreement</div>
+                </div>
+                <button class="modal-close" onclick="closeModal('ndaModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="steps">
+                    <div class="step done">
+                        <div class="step-dot">✓</div><span class="step-lbl">Configure</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step active">
+                        <div class="step-dot">2</div><span class="step-lbl">Preview & Sign</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <div class="step-dot">3</div><span class="step-lbl">Send</span>
+                    </div>
+                </div>
+                <div
+                    style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:30px 34px;line-height:1.7;font-size:13px">
+                    <div style="text-align:center;margin-bottom:14px"><img
+                           src="alera-logo.png" style="height:36px" alt="Alera"></div>
+                    <div style="font-size:19px;font-weight:800;text-align:center;color:var(--blue);margin-bottom:3px">
+                        NON-DISCLOSURE AGREEMENT</div>
+                    <div style="text-align:center;color:var(--muted);font-size:11.5px;margin-bottom:20px">NDA-2025-0010
+                        · Mutual Confidentiality Agreement</div>
+                    <p style="margin-bottom:13px">This Agreement is entered into as of <strong>26th February
+                            2025</strong>, between <strong>Alera Medtech LLC</strong>, 77 Rowe Street, Suite 2C,
+                        Auburndale, MA 02466 (<em>"Disclosing Party"</em>), and <strong><input type="text"
+                                style="border:none;border-bottom:1.5px solid var(--blue);background:transparent;font-size:inherit;font-family:inherit;width:180px;padding:2px 4px"
+                                placeholder="Counter-party Name"></strong> (<em>"Receiving Party"</em>).</p>
+                    <p style="margin-bottom:10px"><strong>1. Confidential Information</strong><br>Both parties may
+                        disclose confidential information including technical data, trade secrets, know-how, research,
+                        product plans, and other proprietary information related to Alera Medtech's medical technology
+                        products.</p>
+                    <p style="margin-bottom:10px"><strong>2. Obligations</strong><br>Each party agrees to hold the other
+                        party's Confidential Information in strict confidence and not disclose it to any third party
+                        without prior written consent.</p>
+                    <p style="margin-bottom:10px"><strong>3. Term</strong><br>This Agreement shall remain in effect for
+                        <select
+                            style="border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:inherit">
+                            <option>1 year</option>
+                            <option>2 years</option>
+                            <option>3 years</option>
+                        </select> from the date of signing.</p>
+                    <p style="margin-bottom:10px"><strong>4. Governing Law</strong><br>This Agreement shall be governed
+                        by the laws of the Commonwealth of Massachusetts, United States.</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+                        <div>
+                            <div style="font-weight:700;margin-bottom:7px;font-size:12.5px">For Alera Medtech LLC</div>
+                            <div
+                                style="font-family:'Dancing Script',cursive;font-size:28px;color:var(--blue);border-bottom:1.5px solid var(--ink);padding-bottom:3px">
+                                Alera Medtech</div>
+                            <div style="font-size:10.5px;color:var(--muted);margin-top:4px">Authorised Signatory · EIN:
+                                88-3147715</div>
+                        </div>
+                        <div>
+                            <div style="font-weight:700;margin-bottom:7px;font-size:12.5px">For Counter-party</div>
+                            <div
+                                style="border-bottom:1.5px dashed var(--border);height:40px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11.5px">
+                                Awaiting signature</div>
+                            <div style="font-size:10.5px;color:var(--muted);margin-top:4px">Authorised Signatory · Name
+                                & Title</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('ndaModal')">Close</button>
+                <button class="btn btn-outline" onclick="toast('💾 NDA saved as draft')">Save Draft</button>
+                <button class="btn btn-primary"
+                    onclick="toast('📧 NDA sent for signature!');closeModal('ndaModal')">Send for Signature</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEW MODAL -->
+    <div class="overlay" id="previewModal">
+        <div class="modal modal-lg">
+            <div class="modal-hdr">
+                <div class="modal-title" id="previewTitle">Document Preview</div><button class="modal-close"
+                    onclick="closeModal('previewModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="doc-preview">
+                    <div class="doc-hdr">
+                        <div><img src=""
+                                alt="Alera Medtech" style="height:40px;margin-bottom:7px;display:block">
+                            <div style="font-size:11px;color:var(--muted);line-height:1.6">77 Rowe Street, Suite 2C ·
+                                Auburndale, MA 02466<br>+1 888 70ALERA ·
+                                sales.info@aleramedtech.com<br>www.aleramedtech.com · EIN: 88-3147715</div>
+                        </div>
+                        <div style="text-align:right">
+                            <div class="doc-type" id="pvType">INVOICE</div>
+                            <div class="doc-num-tag" id="pvNum">INV-2025-0001</div>
+                        </div>
+                    </div>
+                    <div class="doc-meta">
+                        <div>
+                            <div class="dm-lbl">Bill To</div>
+                            <div class="dm-val" id="pvCustomer">—</div>
+                        </div>
+                        <div style="display:flex;gap:20px">
+                            <div>
+                                <div class="dm-lbl">Date</div>
+                                <div class="dm-val" id="pvDate">—</div>
+                            </div>
+                            <div>
+                                <div class="dm-lbl">Due Date</div>
+                                <div class="dm-val" id="pvDue">—</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pvItems"></div>
+                    <div class="totals-box" style="margin-top:12px">
+                        <div class="tot-row"><span>Subtotal</span><span id="pvSub">—</span></div>
+                        <div class="tot-row tot-grand"><span>Total (USD)</span><span id="pvTotal">—</span></div>
+                    </div>
+                    <div class="sec-div" style="margin-top:18px">Payment Instructions</div>
+                    <div class="bank-box">
+                        <div class="bank-row"><span class="bank-lbl">Bank</span><span class="bank-val">Bank of
+                                America</span></div>
+                        <div class="bank-row"><span class="bank-lbl">Account</span><span class="bank-val">Alera Medtech
+                                LLC — 466016030996</span></div>
+                        <div class="bank-row"><span class="bank-lbl">ACH Routing</span><span
+                                class="bank-val">011000138</span></div>
+                        <div class="bank-row"><span class="bank-lbl">Wire Routing</span><span
+                                class="bank-val">026009593</span></div>
+                        <div class="bank-row"><span class="bank-lbl">SWIFT</span><span class="bank-val">BOFAUS3N</span>
+                        </div>
+                    </div>
+                    <div id="pvNotes" style="margin-top:16px;font-size:12px;color:var(--muted)"></div>
+                    <div style="margin-top:18px;display:flex;justify-content:flex-end">
+                        <div style="text-align:center">
+                            <div
+                                style="font-family:'Dancing Script',cursive;font-size:30px;color:var(--blue);border-bottom:1.5px solid var(--ink);padding-bottom:3px;min-width:140px">
+                                Alera Medtech</div>
+                            <div style="font-size:10.5px;color:var(--muted);margin-top:3px">Authorised Signatory — Alera
+                                Medtech LLC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('previewModal')">Close</button>
+                <button class="btn btn-outline" onclick="toast('📥 Downloaded as PDF')">Download PDF</button>
+                <button class="btn btn-primary" onclick="toast('📧 Sent to customer!');closeModal('previewModal')">Send
+                    to Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER MODAL -->
+    <div class="overlay" id="userModal">
+        <div class="modal">
+            <div class="modal-hdr">
+                <div class="modal-title">Add / Edit User</div><button class="modal-close"
+                    onclick="closeModal('userModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="fg"><label class="lbl">Full Name</label><input class="fc"></div>
+                    <div class="fg"><label class="lbl">Email</label><input class="fc" type="email"
+                            placeholder="name@aleramedtech.com"></div>
+                    <div class="fg"><label class="lbl">Role</label><select class="fc">
+                            <option>Super Admin</option>
+                            <option>Sales Manager</option>
+                            <option>Sales Executive</option>
+                            <option>Accounts</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Status</label><select class="fc">
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('userModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="toast('✅ User saved!');closeModal('userModal')">Save
+                    User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPLOAD MODAL -->
+    <div class="overlay" id="uploadModal">
+        <div class="modal">
+            <div class="modal-hdr">
+                <div class="modal-title">Upload to Library</div><button class="modal-close"
+                    onclick="closeModal('uploadModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-zone" style="margin-bottom:14px">
+                    <div style="font-size:26px;margin-bottom:7px">📂</div>Click to browse or drag & drop<div
+                        style="font-size:11px;margin-top:3px">PDF, DOCX, PPTX, XLSX · Max 50MB</div>
+                </div>
+                <div class="form-grid">
+                    <div class="fg"><label class="lbl">Category</label><select class="fc">
+                            <option>Brochures</option>
+                            <option>Manuals</option>
+                            <option>Marketing</option>
+                            <option>Templates</option>
+                        </select></div>
+                    <div class="fg"><label class="lbl">Document Name</label><input class="fc"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('uploadModal')">Cancel</button>
+                <button class="btn btn-primary"
+                    onclick="toast('✅ File uploaded!');closeModal('uploadModal')">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM MODAL -->
+    <div class="overlay" id="confirmModal">
+        <div class="modal" style="width:400px">
+            <div class="modal-hdr">
+                <div class="modal-title" id="confirmTitle">Confirm Action</div><button class="modal-close"
+                    onclick="closeModal('confirmModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-box">
+                    <div class="icon" id="confirmIcon">⚠️</div>
+                    <strong id="confirmMsg">Are you sure?</strong>
+                    <p id="confirmSub" style="margin-top:5px"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('confirmModal')">Cancel</button>
+                <button class="btn btn-danger" id="confirmOkBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toastEl"><span id="toastMsg"></span></div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
